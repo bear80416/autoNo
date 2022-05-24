@@ -56,12 +56,18 @@
                     HLS: ''
                 },
                 methods: {
+                    /** 
+                     * 增加自動編號填寫欄位
+                    */
                     HLSAddContent: function (idx) {
                         let len = this.HLSFormContentVm.length;
                         this.HLSFormContentVm.splice(idx + 1, 0, {
                             value: ''
                         });
                     },
+                    /**
+                     * 刪除自動編號填寫欄位
+                    */
                     HLSDelContent: function (idx) {
                         let len = this.HLSFormContentVm.length;
                         if (len == 1) alert('請至少填寫一項');
@@ -81,6 +87,9 @@
                         }
                         isValid ? this.HLS = result : alert(messages);
                     },
+                    /** 
+                     * 自動編號中文顯示
+                    */
                     HLSChangeNo: function (idx){
                         let strIdx = idx.toString();
                         if(idx > 9){
