@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+
+<body>
+    <h3>test</h3>
+
+    <div class="container mt-5" id="app">
+        <button class="btn btn-danger" v-on:click="init()">帶入資料</button>
+        <div class="row mt-4 mb-4">
+            <div class="col-12 mt-2" v-for="(item,index) in HLSFormContentVm">
+                <label class="btn btn-light mb-2" for="">{{HLSChangeNo(index)}}、
+                    <button class="btn-close" v-on:click="HLSDelContent(index)"></button>
+                </label>
+                <button class="btn btn-outline-info mb-2"
+                    v-on:click="HLSAddContent(index)">新增第{{HLSChangeNo(index+1)}}點</button>
+                <textarea class="form-control" name="" id="" cols="30" rows="4" v-model="item.value"></textarea>
+            </div>
+
+        </div>
+        <button class="btn btn-warning" v-on:click="AddNewHLS()">送出</button>
+        <div class="row mt-5">
+            <div class="col-12" >
+                <ol style="list-style-type:cjk-ideographic;" class="text-break" v-html="HLS" ></ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script>
+        let contextData = '<li>12aa3123</li><li>1231a23</li><li>123fdssd123</li>';
+
+        let vm;
+
+        function Binding() {
+            vm = new Vue({
+                el: '#app',
+                data: {
+                    chineseNoList: ['ㄧ', '二', '三', '四', '五', '六', '七', '八', '九', '十'],
+                    HLSFormContentVm: [{
+                        value: ''
+                    }],
+                    HLS: ''
+                },
+                methods: {
+                    HLSAddContent: function (idx) {
+                        let len = this.HLSFormContentVm.length;
+                        this.HLSFormContentVm.splice(idx + 1, 0, {
+                            value: ''
+                        });
+                    },
+                    HLSDelContent: function (idx) {
+                        let len = this.HLSFormContentVm.length;
+                        if (len == 1) alert('請至少填寫一項');
+                        this.HLSFormContentVm.splice(idx, 1);
+                    },
+                    AddNewHLS: function () {
+                        this.HLS = '';
+                        let result = '';
+                        let isValid = true;
+                        let messages = '';
+                        for (let i = 0; i < this.HLSFormContentVm.length; i++) {
+                            if (this.HLSFormContentVm[i].value == '') {
+                                messages += '第' + this.chineseNo[i] + '格內容不可為空';
+                                isValid = false;
+                            }
+                            result += '<li>' + this.HLSFormContentVm[i].value + '</li>';
+                        }
+                        isValid ? this.HLS = result : alert(messages);
+                    },
+                    HLSChangeNo: function (idx){
+                        let strIdx = idx.toString();
+                        if(idx > 9){
+                            if(strIdx[1] === '9') return this.chineseNoList[strIdx[0]] + this.chineseNoList[9]
+                            if(strIdx[0] === '1') return this.chineseNoList[9] + this.chineseNoList[strIdx[1]]
+                            return this.chineseNoList[strIdx[0]-1] + this.chineseNoList[9] + this.chineseNoList[strIdx[1]]
+                        }
+                        return this.chineseNoList[idx]
+                    },
+                    init:function(){
+                        let me = this;
+                        this.HLSFormContentVm = [];
+                        contextData.split('</li><li>').forEach(function(val,idx,array){
+                            if(idx == 0) val = val.replace('<li>','');
+                            if(idx == array.length-1) val = val.replace('</li>','');
+                            me.HLSFormContentVm.push({value:val})
+                        })
+                    },
+
+                }
+            })
+        }
+        document.addEventListener("DOMContentLoaded", function (event) {
+            Binding();
+        })
+    </script>
+</body>
+
+</html>
