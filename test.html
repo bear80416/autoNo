@@ -49,7 +49,9 @@
             vm = new Vue({
                 el: '#app',
                 data: {
+                    /** 中文順序 */
                     chineseNoList: ['ㄧ', '二', '三', '四', '五', '六', '七', '八', '九', '十'],
+                    /** 亮點新增表單-內容欄位 */
                     HLSFormContentVm: [{
                         value: ''
                     }],
@@ -60,7 +62,6 @@
                      * 增加自動編號填寫欄位
                     */
                     HLSAddContent: function (idx) {
-                        let len = this.HLSFormContentVm.length;
                         this.HLSFormContentVm.splice(idx + 1, 0, {
                             value: ''
                         });
